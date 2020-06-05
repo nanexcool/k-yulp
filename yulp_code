@@ -1,0 +1,68 @@
+
+object "SimpleStore" {
+  code {
+    datacopy(0, dataoffset("Runtime"), datasize("Runtime"))
+    return(0, datasize("Runtime"))
+  }
+  object "Runtime" {
+    code {
+function require(arg) {
+  if lt(arg, 1) {
+    revert(0, 0)
+  }
+}
+
+function mslice(position, length) -> result {
+  if gt(length, 32) { revert(0, 0) } // protect against overflow
+
+  result := div(mload(position), exp(2, sub(256, mul(length, 8))))
+}
+
+
+
+        function Calldata.sig(pos) -> res {
+          res := mslice(Calldata.sig.position(pos), 4)
+        }
+        
+
+
+        function Calldata.sig.position(pos) -> _offset {
+          _offset := add(0x00, add(pos, 0))
+        }
+        
+
+
+        function Calldata.val(pos) -> res {
+          res := mslice(Calldata.val.position(pos), 32)
+        }
+        
+
+
+        function Calldata.val.position(pos) -> _offset {
+          _offset := add(0x04, add(pos, 0))
+        }
+        
+
+      require(iszero(callvalue()))
+
+      calldatacopy(0, 0, 36)
+
+      
+
+      switch Calldata.sig(0)
+
+      case 0x6057361d {
+        sstore(0, Calldata.val(0))
+      }
+
+      case 0x6d4ce63c {
+        mstore(100, sload(0))
+        return (100, 32)
+      }
+      
+      default {
+        revert(0, 0)
+      }
+    }
+  }
+}
