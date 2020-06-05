@@ -6,7 +6,7 @@ specs: dapp
 dapp:
 	# git submodule sync --recursive
 	# git submodule update --init --recursive
-	cd yulp && SOLC_FLAGS=--optimize dapp --use solc:0.6.7 build && cd ../
+	cd yulp && SOLC_FLAGS= dapp --use solc:0.6.7 build && cd ../
 
 .PHONY: clean
 clean:
